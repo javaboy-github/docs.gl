@@ -19,7 +19,7 @@ import urllib2
 parser = argparse.ArgumentParser(description="Compile OpenGL documentation, generate a static webpage.")
 
 parser.add_argument('--full', dest='buildmode', action='store_const', const='full', default='fast', help='Full build (Default: fast build)')
-parser.add_argument('--local-assets', dest='local_assets', action='store_true', help='Use local JS/Fonts (Default: don\'t use)')
+parser.add_argument('--local-assets', dest='local_assets', action='store_true', help='Use local JS/Fstyle_darkonts (Default: don\'t use)')
 
 ########################## Print  ##########################
 
@@ -75,6 +75,8 @@ if args.local_assets:
     if not os.path.exists(path):
       dirname = os.path.dirname(path)
       create_directory(dirname)
+      if suffix == None:
+          suffix = ""
       url = url + filename + suffix
       with open(path, 'w') as f:
         print "Downloading " + url
@@ -622,386 +624,390 @@ major_versions.sort()
 
 ######################## Where Everything comes together ##########################
 
-for version in major_versions:
-  if int(version[2]) < 2:
-    continue
-  #No GLSL 3 docs 
-  if version == 'sl3':
-    continue    
-	
-  written = 0
+for lang in ["en", "jp"]:
+    for version in major_versions:
+      if int(version[2]) < 2:
+        continue
+      #No GLSL 3 docs 
+      if version == 'sl3':
+        continue    
+        
+      written = 0
 
-  print "Compiling " + version + " ..." 
-  header_for_version = header;
-  footer_for_version = footer;
-  
-  all_versions = [];
-  
-  all_versions = opengl.version_commands.keys()
-  glsl_all_versions = glsl.version_commands.keys()
-  all_versions += glsl_all_versions
-    
-  all_versions.sort()
-  
-  # Find latest minor version for this major version.
-  latest_minor = version[:3] + ".0"
-  for version_option in all_versions:
-    if version[:2] != version_option[:2]:
-      continue
+      print "Compiling " + version + " ..." 
+      header_for_version = header;
+      footer_for_version = footer;
       
-    if latest_minor[2] == version_option[2] and float(latest_minor[2:]) < float(version_option[2:]):
-      latest_minor = version_option
-
-  toc_versions_options = ""
-  toc_versions_options_gl = ""
-  toc_versions_options_es = ""
-  toc_versions_options_sl = ""
-  toc_versions_options_el = ""
-  for version_option in all_versions:
-    if version_option[0:2] == "gl" and float(version_option[2:]) < 2.1:
-      continue
-
-    if version_option[0:2] == "es" and float(version_option[2:]) < 2.0:
-      continue
-
-    if version_option[0:2] == "sl" and float(version_option[2:]) < 4.0:
-      continue
-
-    if version_option[0:2] == "el" and float(version_option[2:]) < 3.0:
-      continue
+      all_versions = [];
       
-    selected = ""
-    if version_option == latest_minor:
-      selected = " selected='selected'"
- 
-    if version_option[:2] == 'gl':
-      toc_versions_options_gl = toc_versions_options_gl + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">OpenGL " + version_option[2:] + "</option>"
-    elif version_option[:2] == 'es':
-      toc_versions_options_es = toc_versions_options_es + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">OpenGL ES " + version_option[2:] + "</option>"
-    elif version_option[:2] == 'sl':
-      toc_versions_options_sl = toc_versions_options_sl + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">GLSL " + version_option[2:] + "</option>"
-    elif version_option[:2] == 'el':
-      toc_versions_options_el = toc_versions_options_el + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">GLSL ES " + version_option[2:] + "</option>"
-  
-  #Place dropdown in desired order
-  toc_versions_options =  toc_versions_options_gl + toc_versions_options_es + toc_versions_options_sl + toc_versions_options_el  
-  header_for_version = header_for_version.replace("{$versions_options}", toc_versions_options)
-  header_for_version = header_for_version.replace("{$command_major_version}", version[2])
-    
-  API_type = ""
-    
-  if version[0:2] == "gl":
-    header_for_version = header_for_version.replace("{$api_name}", "OpenGL")
-  elif version[0:2] == "es":
-    header_for_version = header_for_version.replace("{$api_name}", "OpenGL ES")
-  elif version[0:2] == "sl":
-    header_for_version = header_for_version.replace("{$api_name}", "GLSL")
-  elif version[0:2] == "el":
-    header_for_version = header_for_version.replace("{$api_name}", "GLSL ES")
-#Hope this works!
-  if version[0:2] == "gl" or version[0:2] == "es":
-    commands_version_flat = opengl.commands_version_flat
-    API_type = "gl"
-  if version[0:2] == "sl" or version[0:2] == "el":
-    commands_version_flat = glsl.commands_version_flat  
-    API_type = "sl"
-    
-  for command in commands_version_flat:
-  
-    if API_type == "gl":
-        if not version in opengl.get_major_versions(opengl.commands_version_flat[command]):
+      all_versions = opengl.version_commands.keys()
+      glsl_all_versions = glsl.version_commands.keys()
+      all_versions += glsl_all_versions
+        
+      all_versions.sort()
+      
+      # Find latest minor version for this major version.
+      latest_minor = version[:3] + ".0"
+      for version_option in all_versions:
+        if version[:2] != version_option[:2]:
+          continue
+          
+        if latest_minor[2] == version_option[2] and float(latest_minor[2:]) < float(version_option[2:]):
+          latest_minor = version_option
+
+      toc_versions_options = ""
+      toc_versions_options_gl = ""
+      toc_versions_options_es = ""
+      toc_versions_options_sl = ""
+      toc_versions_options_el = ""
+      for version_option in all_versions:
+        if version_option[0:2] == "gl" and float(version_option[2:]) < 2.1:
+          continue
+
+        if version_option[0:2] == "es" and float(version_option[2:]) < 2.0:
+          continue
+
+        if version_option[0:2] == "sl" and float(version_option[2:]) < 4.0:
+          continue
+
+        if version_option[0:2] == "el" and float(version_option[2:]) < 3.0:
+          continue
+          
+        selected = ""
+        if version_option == latest_minor:
+          selected = " selected='selected'"
+     
+        if version_option[:2] == 'gl':
+          toc_versions_options_gl = toc_versions_options_gl + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">OpenGL " + version_option[2:] + "</option>"
+        elif version_option[:2] == 'es':
+          toc_versions_options_es = toc_versions_options_es + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">OpenGL ES " + version_option[2:] + "</option>"
+        elif version_option[:2] == 'sl':
+          toc_versions_options_sl = toc_versions_options_sl + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">GLSL " + version_option[2:] + "</option>"
+        elif version_option[:2] == 'el':
+          toc_versions_options_el = toc_versions_options_el + "<option class='versions_option' value='" + version_option.replace(".", "") + "'" + selected + ">GLSL ES " + version_option[2:] + "</option>"
+      
+      #Place dropdown in desired order
+      toc_versions_options =  toc_versions_options_gl + toc_versions_options_es + toc_versions_options_sl + toc_versions_options_el  
+      header_for_version = header_for_version.replace("{$versions_options}", toc_versions_options)
+      header_for_version = header_for_version.replace("{$command_major_version}", version[2])
+        
+      API_type = ""
+        
+      if version[0:2] == "gl":
+        header_for_version = header_for_version.replace("{$api_name}", "OpenGL")
+      elif version[0:2] == "es":
+        header_for_version = header_for_version.replace("{$api_name}", "OpenGL ES")
+      elif version[0:2] == "sl":
+        header_for_version = header_for_version.replace("{$api_name}", "GLSL")
+      elif version[0:2] == "el":
+        header_for_version = header_for_version.replace("{$api_name}", "GLSL ES")
+    #Hope this works!
+      if version[0:2] == "gl" or version[0:2] == "es":
+        commands_version_flat = opengl.commands_version_flat
+        API_type = "gl"
+      if version[0:2] == "sl" or version[0:2] == "el":
+        commands_version_flat = glsl.commands_version_flat  
+        API_type = "sl"
+        
+      for command in commands_version_flat:
+      
+        if API_type == "gl":
+            if not version in opengl.get_major_versions(opengl.commands_version_flat[command]):
+                continue
+        if API_type == "sl":
+            if not version in glsl.get_major_versions(glsl.commands_version_flat[command]):
+                continue    
+     
+        header_for_command = header_for_version
+        footer_for_command = footer_for_version
+
+        # Find latest version that has this command present.
+        latest_version = version[:3] + ".0"
+        for version_option in all_versions:
+          if version[:2] != version_option[:2]:
             continue
-    if API_type == "sl":
-        if not version in glsl.get_major_versions(glsl.commands_version_flat[command]):
-            continue    
- 
-    header_for_command = header_for_version
-    footer_for_command = footer_for_version
+          if API_type == "gl":
+              if not command in opengl.version_commands_flat[version_option]:
+                  continue
+          if API_type == "sl":
+              if not command in glsl.version_commands_flat[version_option]:
+                  continue        
+          if latest_version[2] == version_option[2] and float(latest_version[2:]) < float(version_option[2:]):
+            latest_version = version_option
 
-    # Find latest version that has this command present.
-    latest_version = version[:3] + ".0"
-    for version_option in all_versions:
-      if version[:2] != version_option[:2]:
-        continue
-      if API_type == "gl":
-          if not command in opengl.version_commands_flat[version_option]:
-              continue
-      if API_type == "sl":
-          if not command in glsl.version_commands_flat[version_option]:
-              continue        
-      if latest_version[2] == version_option[2] and float(latest_version[2:]) < float(version_option[2:]):
-        latest_version = version_option
+        api_commands = ""
+        glsl_api_commands =""
+        #if API_type == "gl":
+        for category in opengl.command_categories:
+            api_commands += spew_category(category, opengl.command_categories[category], command , "gl" )
+        #if API_type == "sl":
+        for category in glsl.command_categories:
+            glsl_api_commands += spew_category(category, glsl.command_categories[category], command, "sl")        
+        #if API_type == "gl":
+        if len(unhandled_commands):
+            api_commands += spew_category("Uncategorized", unhandled_commands, command,"gl")
+        #if API_type == "sl":
+        if len(glsl_unhandled_commands):
+            glsl_api_commands += spew_category("Uncategorized", glsl_unhandled_commands, command,"sl")
 
-    api_commands = ""
-    glsl_api_commands =""
-    #if API_type == "gl":
-    for category in opengl.command_categories:
-        api_commands += spew_category(category, opengl.command_categories[category], command , "gl" )
-    #if API_type == "sl":
-    for category in glsl.command_categories:
-        glsl_api_commands += spew_category(category, glsl.command_categories[category], command, "sl")        
-    #if API_type == "gl":
-    if len(unhandled_commands):
-        api_commands += spew_category("Uncategorized", unhandled_commands, command,"gl")
-    #if API_type == "sl":
-    if len(glsl_unhandled_commands):
-        glsl_api_commands += spew_category("Uncategorized", glsl_unhandled_commands, command,"sl")
-
-    header_for_command = header_for_command.replace("{$api_commands}", api_commands)
-    header_for_command = header_for_command.replace("{$glsl_api_commands}", glsl_api_commands)
-       
-    header_for_command = header_for_command.replace("{$current_api}", latest_version.replace(".", ""))
-    
-    command_major_versions ={}
-    if API_type == "gl":
-        command_major_versions = opengl.get_major_versions_available(command)
-        command_major_versions.sort(reverse=True)
-    if API_type == "sl":
-        command_major_versions = glsl.get_major_versions_available(command)
-        command_major_versions.sort(reverse=True)
-    
-    command_versions = ""
-
-    for major_version in command_major_versions:
-      link_class = ""
-      if major_version == version:
-        link_class = "class='current'"
+        header_for_command = header_for_command.replace("{$api_commands}", api_commands)
+        header_for_command = header_for_command.replace("{$glsl_api_commands}", glsl_api_commands)
+           
+        header_for_command = header_for_command.replace("{$current_api}", latest_version.replace(".", ""))
         
-      es = ""
-      if major_version[:2] == 'es' or major_version[:2] == 'el':
-        es = "ES "
-
-      if major_version[:2] == 'sl' and int(major_version[2:3]) == 3:
-        continue
-      
-      API=""
-      if API_type == "sl":
-         API="GLSL"
-      if API_type == "gl":
-         API="OpenGL"
-      
-      command_versions += "<a " + link_class + " href='../" + major_version + "/" + command + "'>"+API+" " + es + major_version[2] + "</a><br />"
-      
-    header_for_command = header_for_command.replace("{$command_versions}", command_versions)
-    header_for_command = header_for_command.replace("{$command}", command)
-    
-    editlink = "https://github.com/BSVino/docs.gl/blob/master/" + version + "/" + command + ".xhtml"
-    improvepage = "Think you can improve this page? <a href='" + editlink + "'>Edit this page</a> on <a href='https://github.com/BSVino/docs.gl/'>GitHub</a>."
-    footer_for_command = footer_for_command.replace("{$improvepage}", improvepage)
-
-    es = ""
-    if version[:2] == 'es':
-      es = "ES "
-
-    comments = ""
-    '''comments = """<div id="outer_disqus_thread">Guidelines for comments:
-      <ul>
-        <li>Please limit comments to """+API+ " " + es + version[2] + """ """ + command + """.</li>
-        <li>Have a question? Try <a href="http://stackoverflow.com/questions/tagged/opengl">Stack Overflow</a> or the <a href="https://www.opengl.org/discussion_boards/forum.php">OpenGL Forums</a>.</li>
-        <li>Instead of commenting, consider <a href='""" + editlink + """'>editing this page on GitHub</a> instead.</li>
-      </ul>
-    <div id="disqus_thread"></div></div><script type="text/javascript">
-    var disqus_shortname = 'docsgl';
-    var disqus_identifier = '""" + version + "_" + command + """';
-    var disqus_title = 'Comments about """ + version + "/" + command + """';
-    var disqus_url = 'https://docs.gl/""" + version + "/" + command + """';
-
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>"""'''
-    footer_for_command = footer_for_command.replace("{$comments}", comments)
-
-    version_dir = version
-    
-    create_directory(output_dir + version_dir)
-
-    command_file = {}
-    if API_type == "gl":
-        command_file = shared.find_command_file(version, command)
-    if API_type == "sl":
-        command_file = shared_glsl.find_command_file(version, command)
-    if command_file == False:
-      raise IOError("Couldn't find page for command " + command + " (" + version + ")")
-
-    fp = open(command_file)
-    command_html = fp.read()
-    fp.close()
-    
-    if args.buildmode == 'full':
-      command_html = command_html.decode('utf8')
-
-    command_html = command_html.replace("{$pipelinestall}", "")
-    
-    examples_html = ""
-    example_functions ={}
-    if API_type == "gl":
-        example_functions = opengl.example_functions
-    if API_type == "sl":
-        example_functions = glsl.example_functions
+        command_major_versions ={}
+        if API_type == "gl":
+            command_major_versions = opengl.get_major_versions_available(command)
+            command_major_versions.sort(reverse=True)
+        if API_type == "sl":
+            command_major_versions = glsl.get_major_versions_available(command)
+            command_major_versions.sort(reverse=True)
         
-    if command in example_functions:
-      examples = "<div class='refsect1' id='examples'><h2>Examples</h2>"
-      
-      examples_done = []
-      #change opengl.example_functions to example_functions
-      for example in example_functions[command]:
-      
-        if not version[:3] in example['versions']:
-          continue
-          
-        if example['example'] in examples_done:
-          continue
-          
-        examples_done.append(example['example'])
-        
-        code={}
-        if API_type =="gl":         
-            code = opengl.examples[example['example']]['code']
-        if API_type =="sl":         
-            code = glsl.examples[example['example']]['code']
+        command_versions = ""
+
+        for major_version in command_major_versions:
+          link_class = ""
+          if major_version == version:
+            link_class = "class='current'"
             
-        def replace_alias(matchobj):
-          alias = matchobj.groups()[0]
-          command = alias
+          es = ""
+          if major_version[:2] == 'es' or major_version[:2] == 'el':
+            es = "ES "
+
+          if major_version[:2] == 'sl' and int(major_version[2:3]) == 3:
+            continue
           
-          if API_type =="gl":  
-            if alias in opengl.function_aliases:
-                command = opengl.function_aliases[alias]
-          if API_type =="sl":  
-            if alias in glsl.function_aliases:
-                command = glsl.function_aliases[alias]                
-
-          return "<a href='../" + version_dir + r"/" + command + "'>" + alias + "</a>"
-
-        code = code.replace("\t", "    ")
-        code = code.replace("&", "&amp;")
-        code = code.replace("<", "&lt;")
-        code = code.replace(">", "&gt;")
-
-        code = re.sub(r"\{%([a-zA-Z_][a-zA-Z_0-9]*?)\}", replace_alias, code)
-
-        code = re.sub(r"(?<![a-zA-Z0-9_])(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while|size_t|NULL|GLbyte|GLshort|GLint|GLsizei|GLfloat|GLclampf|GLdouble|GLclampd|GLubyte|GLboolean|GLushort|GLuint|GLenum|GLbitfield|GLchar)(?![a-zA-Z0-9_])", r"<span class='ckeyword'>\1</span>", code)
-        code = re.sub(r"(GL_[A-Z_0-9]*)", r"<span class='constant'>\1</span>", code)
-        code = re.sub(r'(".*?")', r"<span class='codestring'>\1</span>", code)
-        code = re.sub(r'(//.*?)\n', r"<span class='codecomment'>\1</span>\n", code)
+          API=""
+          if API_type == "sl":
+             API="GLSL"
+          if API_type == "gl":
+             API="OpenGL"
+          
+          command_versions += "<a " + link_class + " href='../" + major_version + "/" + command + "'>"+API+" " + es + major_version[2] + "</a><br />"
+          
+        header_for_command = header_for_command.replace("{$command_versions}", command_versions)
+        header_for_command = header_for_command.replace("{$command}", command)
         
-        examples += "<div class='example'>"
-        if API_type == "gl":  
-            examples += opengl.examples[example['example']]['description']
-        if API_type =="sl":  
-            examples += glsl.examples[example['example']]['description']            
-        examples += "<pre class='programlisting'>"
-        examples += code
-        examples += "</pre>"
-        examples += "</div>"
-      examples += "</div>"
+        editlink = "https://github.com/BSVino/docs.gl/blob/master/" + version + "/" + command + ".xhtml"
+        improvepage = "Think you can improve this page? <a href='" + editlink + "'>Edit this page</a> on <a href='https://github.com/BSVino/docs.gl/'>GitHub</a>."
+        footer_for_command = footer_for_command.replace("{$improvepage}", improvepage)
 
-      examples_html = examples
+        es = ""
+        if version[:2] == 'es':
+          es = "ES "
 
-    tutorial_functions={}  
-    if API_type =="gl":
-        tutorial_functions = opengl.tutorial_functions
-    if API_type =="sl":
-        tutorial_functions = glsl.tutorial_functions
-    
-    if command in tutorial_functions:
-      tutorials = "<div class='refsect1' id='tutorials'><h2>Tutorials</h2><p>"
-      
-      tutorials_done = []
-      
-      tutorial_list={}
-      if API_type =="gl":
-        tutorial_list = opengl.tutorial_functions[command]
-        tutorial_list = sorted(tutorial_list, key=lambda tutorial: opengl.tutorials[tutorial['tutorial']]['name'])
-      if API_type =="sl":  
-        tutorial_list = glsl.tutorial_functions[command]
-        tutorial_list = sorted(tutorial_list, key=lambda tutorial: glsl.tutorials[tutorial['tutorial']]['name'])
+        comments = ""
+        '''comments = """<div id="outer_disqus_thread">Guidelines for comments:
+          <ul>
+            <li>Please limit comments to """+API+ " " + es + version[2] + """ """ + command + """.</li>
+            <li>Have a question? Try <a href="http://stackoverflow.com/questions/tagged/opengl">Stack Overflow</a> or the <a href="https://www.opengl.org/discussion_boards/forum.php">OpenGL Forums</a>.</li>
+            <li>Instead of commenting, consider <a href='""" + editlink + """'>editing this page on GitHub</a> instead.</li>
+          </ul>
+        <div id="disqus_thread"></div></div><script type="text/javascript">
+        var disqus_shortname = 'docsgl';
+        var disqus_identifier = '""" + version + "_" + command + """';
+        var disqus_title = 'Comments about """ + version + "/" + command + """';
+        var disqus_url = 'https://docs.gl/""" + version + "/" + command + """';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>"""'''
+        footer_for_command = footer_for_command.replace("{$comments}", comments)
+
+        version_dir = version
         
-      for tutorial in tutorial_list:
-      
-        if not version[:3] in tutorial['versions']:
-          continue
+        create_directory(output_dir + version_dir)
+
+        command_file = {}
+        if API_type == "gl":
+            command_file = shared.find_command_file(lang, version, command)
+        if API_type == "sl":
+            command_file = shared_glsl.find_command_file(lang, version, command)
+        if command_file == False:
+          raise IOError("Couldn't find page for command " + command + " (" + version + ")")
+
+        fp = open(command_file)
+        command_html = fp.read()
+        fp.close()
+        
+        if args.buildmode == 'full':
+          command_html = command_html.decode('utf8')
+
+        command_html = command_html.replace("{$pipelinestall}", "")
+        
+        examples_html = ""
+        example_functions ={}
+        if API_type == "gl":
+            example_functions = opengl.example_functions
+        if API_type == "sl":
+            example_functions = glsl.example_functions
+            
+        if command in example_functions:
+          examples = "<div class='refsect1' id='examples'><h2>Examples</h2>"
           
-        if tutorial['tutorial'] in examples_done:
-          continue
+          examples_done = []
+          #change opengl.example_functions to example_functions
+          for example in example_functions[command]:
           
-        examples_done.append(tutorial['tutorial'])
-        if API_type =="gl":          
-            tutorials += '<a href="' + opengl.tutorials[tutorial['tutorial']]['link'] + '">' + opengl.tutorials[tutorial['tutorial']]['name'] + "</a><br />"
+            if not version[:3] in example['versions']:
+              continue
+              
+            if example['example'] in examples_done:
+              continue
+              
+            examples_done.append(example['example'])
+            
+            code={}
+            if API_type =="gl":         
+                code = opengl.examples[example['example']]['code']
+            if API_type =="sl":         
+                code = glsl.examples[example['example']]['code']
+                
+            def replace_alias(matchobj):
+              alias = matchobj.groups()[0]
+              command = alias
+              
+              if API_type =="gl":  
+                if alias in opengl.function_aliases:
+                    command = opengl.function_aliases[alias]
+              if API_type =="sl":  
+                if alias in glsl.function_aliases:
+                    command = glsl.function_aliases[alias]                
+
+              return "<a href='../" + version_dir + r"/" + command + "'>" + alias + "</a>"
+
+            code = code.replace("\t", "    ")
+            code = code.replace("&", "&amp;")
+            code = code.replace("<", "&lt;")
+            code = code.replace(">", "&gt;")
+
+            code = re.sub(r"\{%([a-zA-Z_][a-zA-Z_0-9]*?)\}", replace_alias, code)
+
+            code = re.sub(r"(?<![a-zA-Z0-9_])(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while|size_t|NULL|GLbyte|GLshort|GLint|GLsizei|GLfloat|GLclampf|GLdouble|GLclampd|GLubyte|GLboolean|GLushort|GLuint|GLenum|GLbitfield|GLchar)(?![a-zA-Z0-9_])", r"<span class='ckeyword'>\1</span>", code)
+            code = re.sub(r"(GL_[A-Z_0-9]*)", r"<span class='constant'>\1</span>", code)
+            code = re.sub(r'(".*?")', r"<span class='codestring'>\1</span>", code)
+            code = re.sub(r'(//.*?)\n', r"<span class='codecomment'>\1</span>\n", code)
+            
+            examples += "<div class='example'>"
+            if API_type == "gl":  
+                examples += opengl.examples[example['example']]['description']
+            if API_type =="sl":  
+                examples += glsl.examples[example['example']]['description']            
+            examples += "<pre class='programlisting'>"
+            examples += code
+            examples += "</pre>"
+            examples += "</div>"
+          examples += "</div>"
+
+          examples_html = examples
+
+        tutorial_functions={}  
+        if API_type =="gl":
+            tutorial_functions = opengl.tutorial_functions
         if API_type =="sl":
-            tutorials += '<a href="' + glsl.tutorials[tutorial['tutorial']]['link'] + '">' + glsl.tutorials[tutorial['tutorial']]['name'] + "</a><br />"
-      tutorials += "</p></div>"
+            tutorial_functions = glsl.tutorial_functions
+        
+        if command in tutorial_functions:
+          tutorials = "<div class='refsect1' id='tutorials'><h2>Tutorials</h2><p>"
+          
+          tutorials_done = []
+          
+          tutorial_list={}
+          if API_type =="gl":
+            tutorial_list = opengl.tutorial_functions[command]
+            tutorial_list = sorted(tutorial_list, key=lambda tutorial: opengl.tutorials[tutorial['tutorial']]['name'])
+          if API_type =="sl":  
+            tutorial_list = glsl.tutorial_functions[command]
+            tutorial_list = sorted(tutorial_list, key=lambda tutorial: glsl.tutorials[tutorial['tutorial']]['name'])
+            
+          for tutorial in tutorial_list:
+          
+            if not version[:3] in tutorial['versions']:
+              continue
+              
+            if tutorial['tutorial'] in examples_done:
+              continue
+              
+            examples_done.append(tutorial['tutorial'])
+            if API_type =="gl":          
+                tutorials += '<a href="' + opengl.tutorials[tutorial['tutorial']]['link'] + '">' + opengl.tutorials[tutorial['tutorial']]['name'] + "</a><br />"
+            if API_type =="sl":
+                tutorials += '<a href="' + glsl.tutorials[tutorial['tutorial']]['link'] + '">' + glsl.tutorials[tutorial['tutorial']]['name'] + "</a><br />"
+          tutorials += "</p></div>"
+          
+          examples_html += tutorials
+
+        command_html = command_html.replace("{$examples}", examples_html)
+
+        # Strip 'mml' namespace from MathML tags so that MathJax can find them
+        command_html = re.sub(r'<(/?)mml:(.*?)>', r'<\1\2>', command_html)
+
+        output_html = header_for_command + command_html + footer_for_command
+
+        if lang == "en":
+          output = open(output_dir + version_dir + "/" + command, "w")
+        else:
+          output = open(output_dir + lang + "/" + version_dir + "/" + command, "w")
+        output_string = output_html
+        if args.buildmode == 'full':
+          output_string = htmlmin.minify(output_html, remove_comments=True, reduce_boolean_attributes=True, remove_optional_attribute_quotes=False).encode('ascii', 'xmlcharrefreplace')
+        output.write(output_string)
+        output.close()
+        
+        written += 1
+
+      if os.path.exists("html/404.html"):
+        header_for_page = header_for_version
+        footer_for_page = footer_for_version
+
+        api_commands = ""
+        glsl_api_commands = ""
+     #   if API_type =="gl":
+        for category in opengl.command_categories:
+           api_commands += spew_category(category, opengl.command_categories[category], "","gl")
+     #   if API_type =="sl":
+        for category in glsl.command_categories:
+          glsl_api_commands += spew_category(category, glsl.command_categories[category], "","sl")
+        
+     #   if API_type =="gl":      
+        if len(unhandled_commands):
+          api_commands += spew_category("Uncategorized", unhandled_commands, "","gl")
+     #  if API_type =="sl":      
+        if len(glsl_unhandled_commands):
+          glsl_api_commands += spew_category("Uncategorized", glsl_unhandled_commands, "","sl")
+              
+        header_for_page = header_for_page.replace("{$api_commands}", api_commands)
+        header_for_page = header_for_page.replace("{$glsl_api_commands}", glsl_api_commands)
+
+        header_for_page = header_for_page.replace("{$current_api}", latest_minor.replace(".", ""))
+        header_for_page = header_for_page.replace("{$command_versions}", "")
+        header_for_page = header_for_page.replace("{$command}", "Oops! Can't find '<span id='404command'></span>'.")
+        footer_for_page = footer_for_page.replace("{$improvepage}", "")
+
+        fp = open("html/404.html")
+        notfound_html = fp.read()
+        fp.close()
+        
+        if args.buildmode == 'full':
+          notfound_html = notfound_html.decode('utf8')
+        
+        output_html = header_for_page + notfound_html + footer_for_page
+
+        output = open(output_dir + version + "/404", "w")
+        output_string = output_html
+        if args.buildmode == 'full':
+          output_string = htmlmin.minify(output_html, remove_comments=True, reduce_boolean_attributes=True, remove_optional_attribute_quotes=False).encode('ascii', 'xmlcharrefreplace')
+        output.write(output_string)
+        output.close()
       
-      examples_html += tutorials
-
-    command_html = command_html.replace("{$examples}", examples_html)
-
-    # Strip 'mml' namespace from MathML tags so that MathJax can find them
-    command_html = re.sub(r'<(/?)mml:(.*?)>', r'<\1\2>', command_html)
-
-    output_html = header_for_command + command_html + footer_for_command
-
-    output = open(output_dir + version_dir + "/" + command, "w")
-    output_string = output_html
-    if args.buildmode == 'full':
-      output_string = htmlmin.minify(output_html, remove_comments=True, reduce_boolean_attributes=True, remove_optional_attribute_quotes=False).encode('ascii', 'xmlcharrefreplace')
-    output.write(output_string)
-    output.close()
-    
-    written += 1
-
-  if os.path.exists("html/404.html"):
-    header_for_page = header_for_version
-    footer_for_page = footer_for_version
-
-    api_commands = ""
-    glsl_api_commands = ""
- #   if API_type =="gl":
-    for category in opengl.command_categories:
-       api_commands += spew_category(category, opengl.command_categories[category], "","gl")
- #   if API_type =="sl":
-    for category in glsl.command_categories:
-      glsl_api_commands += spew_category(category, glsl.command_categories[category], "","sl")
-    
- #   if API_type =="gl":      
-    if len(unhandled_commands):
-      api_commands += spew_category("Uncategorized", unhandled_commands, "","gl")
- #  if API_type =="sl":      
-    if len(glsl_unhandled_commands):
-      glsl_api_commands += spew_category("Uncategorized", glsl_unhandled_commands, "","sl")
-		  
-    header_for_page = header_for_page.replace("{$api_commands}", api_commands)
-    header_for_page = header_for_page.replace("{$glsl_api_commands}", glsl_api_commands)
-
-    header_for_page = header_for_page.replace("{$current_api}", latest_minor.replace(".", ""))
-    header_for_page = header_for_page.replace("{$command_versions}", "")
-    header_for_page = header_for_page.replace("{$command}", "Oops! Can't find '<span id='404command'></span>'.")
-    footer_for_page = footer_for_page.replace("{$improvepage}", "")
-
-    fp = open("html/404.html")
-    notfound_html = fp.read()
-    fp.close()
-    
-    if args.buildmode == 'full':
-      notfound_html = notfound_html.decode('utf8')
-    
-    output_html = header_for_page + notfound_html + footer_for_page
-
-    output = open(output_dir + version + "/404", "w")
-    output_string = output_html
-    if args.buildmode == 'full':
-      output_string = htmlmin.minify(output_html, remove_comments=True, reduce_boolean_attributes=True, remove_optional_attribute_quotes=False).encode('ascii', 'xmlcharrefreplace')
-    output.write(output_string)
-    output.close()
-  
-  print "Wrote " + str(written) + " commands for " + version
+      print "Wrote " + str(written) + " commands for " + version
 
 with zipfile.ZipFile('docs.gl.zip', 'w', compression=zipfile.ZIP_DEFLATED) as docs_gl_zip:
-  for dirname, _, files in os.walk('htdocs'):
-    for filename in files:
-      docs_gl_zip.write(os.path.join(dirname, filename))
+ for dirname, _, files in os.walk('htdocs'):
+  for filename in files:
+    docs_gl_zip.write(os.path.join(dirname, filename))
 
 shutil.move("docs.gl.zip", "htdocs/") 

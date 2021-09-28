@@ -23,11 +23,18 @@
   </script>
   <script src="../docs.gl.search.js"></script>
   <script src="../docs.gl.js"></script>
-
+	<script>
+		// multi language support
+		$(function(){
+			$("#lang_eng").attr("href", location.href.split("/")[3] + "/{$api_commands}/");
+			$("#lang_jp").attr("href", location.href.split("/")[3] + "/jp/{$api_commands}/");
+		});]
+	</script>
 </head>
 <body>
   <div class='header-bg'>
-    <div class="toggle-container"><a href="#" id="style_light">Light</a> | <a href="#" id="style_dark">Dark</a></div>
+		<div class="toggle-container-lang"><a href="#" id="lang_eng">English</a> | <a href="#" id="lang_jp">Japanese</a></div>
+    <div class="toggle-container-theme"><a href="#" id="style_light">Light</a> | <a href="#" id="style_dark">Dark</a></div>
     <div class='header-container'>
       <div class='header-inner'>
         <a href="/"><h1 class="header-logo">docs.<span class="thicken">GL</span></h1></a>

@@ -167,10 +167,16 @@ a {
 	overflow-y: scroll;
 }
 
-.toggle-container {
+.toggle-container-theme {
 	position: absolute;
 	top: 0;
 	right: 5px;
+}
+
+.toggle-container-lang {
+	position: absolute;
+	top: 0;
+	right: 90px;
 }
 
 .thicken {
