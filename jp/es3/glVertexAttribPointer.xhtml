@@ -1,0 +1,359 @@
+    <div class="refentry" id="glVertexAttribPointer">
+      <div class="titlepage"></div>
+      <div class="refnamediv">
+        <h2>名前</h2>
+        <p>glVertexAttribPointer —  ジェネリック頂点属性データの配列を定義する</p>
+      </div>
+      <div class="refsynopsisdiv">
+        <h2>仕様</h2>
+        <div class="funcsynopsis">
+          <table style="border: 0; cellspacing: 0; cellpadding: 0;" class="funcprototype-table">
+            <tr>
+              <td>
+                <code class="funcdef">void <strong class="fsfunc">glVertexAttribPointer</strong>(</code>
+              </td>
+              <td>GLuint <var class="pdparam">index</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLint <var class="pdparam">size</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLenum <var class="pdparam">type</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLboolean <var class="pdparam">normalized</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLsizei <var class="pdparam">stride</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>const GLvoid * <var class="pdparam">pointer</var><code>)</code>;</td>
+            </tr>
+          </table>
+          <div class="funcprototype-spacer"> </div>
+          <table style="border: 0; cellspacing: 0; cellpadding: 0;" class="funcprototype-table">
+            <tr>
+              <td>
+                <code class="funcdef">void <strong class="fsfunc">glVertexAttribIPointer</strong>(</code>
+              </td>
+              <td>GLuint <var class="pdparam">index</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLint <var class="pdparam">size</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLenum <var class="pdparam">type</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>GLsizei <var class="pdparam">stride</var>, </td>
+            </tr>
+            <tr>
+              <td> </td>
+              <td>const GLvoid * <var class="pdparam">pointer</var><code>)</code>;</td>
+            </tr>
+          </table>
+          <div class="funcprototype-spacer"> </div>
+        </div>
+      </div>
+      <div class="refsect1" id="parameters">
+        <h2>パラメーター</h2>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">
+                <em class="parameter">
+                  <code>index</code>
+                </em>
+              </span>
+            </dt>
+            <dd>
+              <p>変更するジェネリック頂点属性のインデックスを指定する</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <em class="parameter">
+                  <code>size</code>
+                </em>
+              </span>
+            </dt>
+            <dd>
+              <p>ジェネリック頂点属性ごとのコンポーネントの数を指定する。1、2、3、4でなければならない。初期値は4。</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <em class="parameter">
+                  <code>type</code>
+                </em>
+              </span>
+            </dt>
+            <dd>
+              <p>配列のコンポーネントごとのデータ型を指定する。
+                使用できる定数は
+            <code class="constant">GL_BYTE</code>、
+            <code class="constant">GL_UNSIGNED_BYTE</code>、
+            <code class="constant">GL_SHORT</code>、
+            <code class="constant">GL_UNSIGNED_SHORT</code>、
+            <code class="constant">GL_INT</code>、
+            <code class="constant">GL_UNSIGNED_INT</code>で、 追加で以下も使える。
+            <code class="constant">GL_HALF_FLOAT</code>、
+            <code class="constant">GL_FLOAT</code>、
+            <code class="constant">GL_FIXED</code>、
+            <code class="constant">GL_INT_2_10_10_10_REV</code>、
+            <code class="constant">GL_UNSIGNED_INT_2_10_10_10_REV</code>は、<code class="function">glVertexAttribPointer</code>で使用できる。
+            初期値は<code class="constant">GL_FLOAT</code>。/p>
+            </dd>
+            <dt>
+              <span class="term">
+                <em class="parameter">
+                  <code>normalized</code>
+                </em>
+              </span>
+            </dt>
+            <dd>
+              <p><code class="function">glVertexAttribPointer</code>では、 正規化されている固定小数点かどうかを指定し
+            (<code class="constant">GL_TRUE</code>)
+            または、アクセス済みの時に直接固定小数点に変換する
+            or converted directly as fixed-point values
+            (<code class="constant">GL_FALSE</code>)
+            このパラメーターは、<em class="parameter"><code>type</code></em>が<code class="constant">GL_FIXED</code>の時に無視される。</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <em class="parameter">
+                  <code>stride</code>
+                </em>
+              </span>
+            </dt>
+            <dd>
+              <p>
+                連続したジェネリック頂点属性の間のオフセットを指定する。
+                もし<em class="parameter"><code>stride</code></em>が0なら,
+                ジェネリック頂点属性は、しっかりとパックされた配列の中にあります。
+            </p>
+            </dd>
+            <dt>
+              <span class="term">
+                <em class="parameter">
+                  <code>pointer</code>
+                </em>
+              </span>
+            </dt>
+            <dd>
+              <p>
+                配列の最初のジェネリック頂点属性へのポインタを指定する、
+                もし、0でないバッファが現在<code class="constant">GL_ARRAY_BUFFER</code>へバウンドされているなら、
+                そのバッファのデータストアの配列へのオフセットを指定する。
+                初期値は0。
+            </p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="refsect1" id="description">
+        <h2>説明</h2>
+        <p>
+            <code class="function">glVertexAttribPointer</code>と<code class="function">glVertexAttribIPointer</code>
+            は、<em class="parameter"><code>index</code></em>のジェネリック頂点属性の配列の位置と日付のフォーマットをレンダリングのために特定する。
+            属性ごとのコンポーネントの数を<em class="parameter"><code>size</code></em>に指定し、
+            1、2、3、4である必要がある。
+            コンポーネントごとのデータ型<em class="parameter"><code>type</code></em>に指定し、一つの属性から次への飛ばすバイト数<em class="parameter"><code>stride</code></em>に指定し、
+            一つの配列への頂点と属性をパックしたり、個別の配列を保存したりできるようにする。
+        </p>
+        <p>
+            <code class="function">glVertexAttribPointer</code>では、もし<em class="parameter"><code>normalized</code></em>が<code class="constant">GL_TRUE</code>に設定されていれば、
+            整数形式に保存された値が範囲[-1,1](符号付き)かアクセス済みで浮動小数点の時に[0, 1](符号なし)にマッピングされること示す。
+            それ以外は値が直接正規化せずにfloatに変換されます。
+        </p>
+        <p>
+            <code class="function">glVertexAttribIPointer</code>では、整数型が<code class="constant">GL_BYTE</code>の時のみ,
+            <code class="constant">GL_UNSIGNED_BYTE</code>、<code class="constant">GL_SHORT</code>、<code class="constant">GL_UNSIGNED_SHORT</code>、
+            <code class="constant">GL_INT</code>、<code class="constant">GL_UNSIGNED_INT</code>が受け入れられる。
+             値はいつも整数値のままである。
+        </p>
+        <p>
+            もし0でない名前つきバッファオブジェクトが<code class="constant">GL_ARRAY_BUFFER</code>ターゲットへバウンドされたら
+            (<a class="citerefentry" href="glBindBuffer"><span class="citerefentry"><span class="refentrytitle">glBindBuffer</span></span></a>をみてください)、
+            <em class="parameter"><code>pointer</code></em>は、バッファオブジェクトのデータストアへのバイトオフセット扱われ、
+            バインディング(<code class="constant">GL_ARRAY_BUFFER_BINDING</code>)しているバッファオブジェクトは、ジェネリック頂点属性配列の
+            状態(<code class="constant">GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING</code>)として<em class="parameter"><code>index</code></em>用に保存される。
+        </p>
+        <p>
+            (0の<code class="constant">GL_ARRAY_BUFFER</code>ターゲットへのバインディングをされた)クライアント頂点配列は、
+            接続詞と一緒に0の名前付き頂点属性オブジェクトのなかでのみ有効だ。
+            これはOpenGL ES 2.0で後方互換性を提供する。
+        </p>
+        <p>
+            ジェネリック頂点属性が指定された時に、
+            <em class="parameter"><code>size</code></em>、<em class="parameter"><code>type</code></em>,
+            <em class="parameter"><code>normalized</code></em>、
+            <em class="parameter"><code>stride</code></em>、そして
+            <em class="parameter"><code>pointer</code></em>
+            が頂点配列の状態として保存され、追加で正しい頂点配列バッファオブジェクトにバインディングされる。
+        </p>
+        <p>
+            ジェネリック頂点属性を有効化または無効化するために、
+            <a class="citerefentry" href="glEnableVertexAttribArray"><span class="citerefentry"><span class="refentrytitle">glEnableVertexAttribArray</span></span></a>や
+            <a class="citerefentry" href="glDisableVertexAttribArray"><span class="citerefentry"><span class="refentrytitle">glDisableVertexAttribArray</span></span></a>を<em class="parameter"><code>index</code></em>と一緒に呼び出す。
+            有効ならば、
+            <a class="citerefentry" href="glDrawArrays"><span class="citerefentry"><span class="refentrytitle">glDrawArrays</span></span></a>、
+            <a class="citerefentry" href="glDrawArraysInstanced"><span class="citerefentry"><span class="refentrytitle">glDrawArraysInstanced</span></span></a>、<a class="citerefentry" href="glDrawElements"><span class="citerefentry"><span class="refentrytitle">glDrawElements</span></span></a>、
+            <a class="citerefentry" href="glDrawElementsIntanced"><span class="citerefentry"><span class="refentrytitle">glDrawElementsIntanced</span></span></a>、または<a class="citerefentry" href="glDrawRangeElements"><span class="citerefentry"><span class="refentrytitle">glDrawRangeElements</span></span></a>
+            が呼び出された時に
+            ジェネリック頂点属性は使用されている。
+        </p>
+      </div>
+      <div class="refsect1" id="notes">
+        <h2>ノート</h2>
+        <p>
+            Each generic vertex attribute array is initially disabled and isn't accessed when
+            <a class="citerefentry" href="glDrawElements"><span class="citerefentry"><span class="refentrytitle">glDrawElements</span></span></a>, <a class="citerefentry" href="glDrawRangeElements"><span class="citerefentry"><span class="refentrytitle">glDrawRangeElements</span></span></a>,
+            <a class="citerefentry" href="glDrawArrays"><span class="citerefentry"><span class="refentrytitle">glDrawArrays</span></span></a>, <a class="citerefentry" href="glDrawArraysInstanced"><span class="citerefentry"><span class="refentrytitle">glDrawArraysInstanced</span></span></a>, or <a class="citerefentry" href="glDrawElementsInstanced"><span class="citerefentry"><span class="refentrytitle">glDrawElementsInstanced</span></span></a>
+            is called.
+        </p>
+      </div>
+      <div class="refsect1" id="errors">
+        <h2>エラー</h2>
+        <p>
+            <code class="constant">GL_INVALID_VALUE</code> is generated if
+            <em class="parameter"><code>index</code></em> is greater than or equal to
+            <code class="constant">GL_MAX_VERTEX_ATTRIBS</code>.
+        </p>
+        <p>
+            <code class="constant">GL_INVALID_VALUE</code> is generated if
+            <em class="parameter"><code>size</code></em> is not 1, 2, 3 or 4.
+        </p>
+        <p>
+            <code class="constant">GL_INVALID_ENUM</code> is generated if
+            <em class="parameter"><code>type</code></em> is not an accepted value.
+        </p>
+        <p>
+            <code class="constant">GL_INVALID_VALUE</code> is generated if
+            <em class="parameter"><code>stride</code></em> is negative.
+        </p>
+        <p>
+            <code class="constant">GL_INVALID_OPERATION</code> is generated if
+            <em class="parameter"><code>type</code></em> is
+            <code class="constant">GL_INT_2_10_10_10_REV</code> or
+            <code class="constant">GL_UNSIGNED_INT_2_10_10_10_REV</code> and
+            <em class="parameter"><code>size</code></em> is not 4.
+        </p>
+        <p>
+            <code class="constant">GL_INVALID_OPERATION</code> is generated a
+            non-zero vertex array object is bound, zero is bound to the
+            <code class="constant">GL_ARRAY_BUFFER</code> buffer object binding point
+            and the <em class="parameter"><code>pointer</code></em> argument is not
+            <code class="constant">NULL</code>.
+        </p>
+      </div>
+      <div class="refsect1" id="associatedgets">
+        <h2>関連する項目</h2>
+        <p><a class="citerefentry" href="glGet"><span class="citerefentry"><span class="refentrytitle">glGet</span></span></a>
+        with argument <code class="constant">GL_MAX_VERTEX_ATTRIBS</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttrib</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and <code class="constant">GL_VERTEX_ATTRIB_ARRAY_ENABLED</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttrib</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and <code class="constant">GL_VERTEX_ATTRIB_ARRAY_SIZE</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttrib</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and <code class="constant">GL_VERTEX_ATTRIB_ARRAY_TYPE</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttrib</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and <code class="constant">GL_VERTEX_ATTRIB_ARRAY_NORMALIZED</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttrib</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and <code class="constant">GL_VERTEX_ATTRIB_ARRAY_STRIDE</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttrib</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and <code class="constant">GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING</code></p>
+        <p><a class="citerefentry" href="glGet"><span class="citerefentry"><span class="refentrytitle">glGet</span></span></a> with argument
+        <code class="constant">GL_ARRAY_BUFFER_BINDING</code></p>
+        <p><a class="citerefentry" href="glGetVertexAttribPointerv"><span class="citerefentry"><span class="refentrytitle">glGetVertexAttribPointerv</span></span></a>
+        with arguments <em class="parameter"><code>index</code></em> and
+        <code class="constant">GL_VERTEX_ATTRIB_ARRAY_POINTER</code></p>
+      </div>
+      {$pipelinestall}{$examples}
+      <div class="refsect1" id="versions">
+        <h2>APIバージョンサポート</h2>
+        <div class="informaltable">
+          <table style="border-collapse: collapse; border-top: 2px solid ; border-bottom: 2px solid ; border-left: 2px solid ; border-right: 2px solid ; ">
+            <colgroup>
+              <col style="text-align: left; "/>
+              <col style="text-align: center; " class="firstvers"/>
+              <col style="text-align: center; "/>
+              <col style="text-align: center; " class="lastvers"/>
+            </colgroup>
+            <thead>
+              <tr>
+                <th style="text-align: left; border-right: 2px solid ; ">
+
+            </th>
+                <th style="text-align: center; border-bottom: 2px solid ; " colspan="3">
+                <span class="bold"><strong>OpenGL ES API Version</strong></span>
+            </th>
+              </tr>
+              <tr>
+                <th style="text-align: left; border-right: 2px solid ; border-bottom: 2px solid ; ">
+                <span class="bold"><strong>Function Name</strong></span>
+            </th>
+                <th style="text-align: center; border-right: 2px solid ; border-bottom: 2px solid ; ">
+                <span class="bold"><strong>2.0</strong></span>
+            </th>
+                <th style="text-align: center; border-right: 2px solid ; border-bottom: 2px solid ; ">
+                <span class="bold"><strong>3.0</strong></span>
+            </th>
+                <th style="text-align: center; border-bottom: 2px solid ; ">
+                <span class="bold"><strong>3.1</strong></span>
+            </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: left; border-right: 2px solid ; border-bottom: 2px solid ; ">
+                  <code class="function">glVertexAttribPointer</code>
+                </td>
+                <td style="text-align: center; border-right: 2px solid ; border-bottom: 2px solid ; ">✔</td>
+                <td style="text-align: center; border-right: 2px solid ; border-bottom: 2px solid ; ">✔</td>
+                <td style="text-align: center; border-bottom: 2px solid ; ">✔</td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border-right: 2px solid ; ">
+                  <code class="function">glVertexAttribIPointer</code>
+                </td>
+                <td style="text-align: center; border-right: 2px solid ; ">-</td>
+                <td style="text-align: center; border-right: 2px solid ; ">✔</td>
+                <td style="text-align: center; ">✔</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="refsect1" id="seealso">
+        <h2>関連項目</h2>
+        <p>
+            <a class="citerefentry" href="glBindAttribLocation"><span class="citerefentry"><span class="refentrytitle">glBindAttribLocation</span></span></a>,
+            <a class="citerefentry" href="glBindBuffer"><span class="citerefentry"><span class="refentrytitle">glBindBuffer</span></span></a>,
+            <a class="citerefentry" href="glDisableVertexAttribArray"><span class="citerefentry"><span class="refentrytitle">glDisableVertexAttribArray</span></span></a>,
+            <a class="citerefentry" href="glDrawArrays"><span class="citerefentry"><span class="refentrytitle">glDrawArrays</span></span></a>,
+            <a class="citerefentry" href="glDrawElements"><span class="citerefentry"><span class="refentrytitle">glDrawElements</span></span></a>,
+            <a class="citerefentry" href="glDrawRangeElements"><span class="citerefentry"><span class="refentrytitle">glDrawRangeElements</span></span></a>,
+            <a class="citerefentry" href="glEnableVertexAttribArray"><span class="citerefentry"><span class="refentrytitle">glEnableVertexAttribArray</span></span></a>,
+            <a class="citerefentry" href="glDrawArraysInstanced"><span class="citerefentry"><span class="refentrytitle">glDrawArraysInstanced</span></span></a>,
+            <a class="citerefentry" href="glDrawElementsIntanced"><span class="citerefentry"><span class="refentrytitle">glDrawElementsIntanced</span></span></a>,
+            <a class="citerefentry" href="glVertexAttrib"><span class="citerefentry"><span class="refentrytitle">glVertexAttrib</span></span></a>
+        </p>
+      </div>
+      <div class="refsect1" id="Copyright">
+        <h2>Copyright</h2>
+        <p>
+            Copyright © 2003-2005 3Dlabs Inc. Ltd.
+            Copyright © 2010-2014 Khronos Group.
+            This material may be distributed subject to the terms and conditions set forth in
+            the Open Publication License, v 1.0, 8 June 1999.
+            <a class="link" href="https://opencontent.org/openpub/" target="_top">https://opencontent.org/openpub/</a>.
+        </p>
+      </div>
+    </div>
